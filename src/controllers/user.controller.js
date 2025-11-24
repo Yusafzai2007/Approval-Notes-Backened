@@ -14,9 +14,9 @@ const generatetoken = async (userId) => {
 };
 
 const singupdata = asynhandler(async (req, res) => {
-  const { userName, email, password } = req.body;
+  const { userName, email, password,role } = req.body;
 
-  if (!userName || !email || !password) {
+  if (!userName || !email || !password || !role) {
     throw new apiErrror(400, "singup filed is requireds");
   }
 
@@ -30,7 +30,7 @@ const singupdata = asynhandler(async (req, res) => {
     userName,
     email,
     password,
-    role: "student",
+    role,
   });
 
   const loggedinyser = await signup

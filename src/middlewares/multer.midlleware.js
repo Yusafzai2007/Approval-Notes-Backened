@@ -1,20 +1,12 @@
 import multer from "multer";
 
-function random() {
-  return (1000 + Math.random() * 90000).toString();
-}
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/images");
+    cb(null, "public/images"); // local save
   },
   filename: function (req, file, cb) {
-    const ext = file.originalname.split(".").pop();
-    const genrate = random();
-    cb(null, genrate + "." + ext);
+    cb(null, file.originalname); // keep the original filename
   },
 });
 
-export const upload = multer({
-  storage,
-});
+export const upload = multer({ storage });
