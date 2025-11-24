@@ -20,7 +20,6 @@ const createclass = asynhandler(async (req, res) => {
   // Auto-generate random class code
   let classCode = generateClassCode();
 
-  // Make sure code is unique
   let exists = await Class.findOne({ classCode });
   while (exists) {
     classCode = generateClassCode();
@@ -30,7 +29,7 @@ const createclass = asynhandler(async (req, res) => {
   const createdClass = await Class.create({
     ClassName,
     Subject,
-    classCode, // auto-generated code
+    classCode, 
     teacher: req.user._id,
   });
 
@@ -40,14 +39,12 @@ const createclass = asynhandler(async (req, res) => {
 });
 
 const updateClass = asynhandler(async (req, res) => {
-  const { id } = req.params; // class id from URL
+  const { id } = req.params; 
   const { ClassName, Subject } = req.body;
 
   if (!id) {
     throw new apiErrror(400, "Class ID is required");
   }
-
-  // Find the class
   const foundClass = await Class.findById(id);
 
   if (!foundClass) {
