@@ -17,10 +17,8 @@ const joinClass = asynhandler(async (req, res) => {
     throw new apiErrror(404, "Invalid class code");
   }
 
-  // Check if record exists for this class
   let classMembers = await classMember.findOne({ classId: foundClass._id });
 
-  // If no record exist, create class entry with this student
   if (!classMembers) {
     classMembers = await classMember.create({
       classId: foundClass._id,
@@ -32,14 +30,12 @@ const joinClass = asynhandler(async (req, res) => {
       .json(new apiResponse(200, "Class joined successfully", classMembers));
   }
 
-  // Check if student already inside array
   if (classMembers.students.includes(req.user._id)) {
     return res
       .status(200)
       .json(new apiResponse(200, "You are already a member", classMembers));
   }
 
-  // Add student to array
   classMembers.students.push(req.user._id);
   await classMembers.save();
 
@@ -79,18 +75,15 @@ const myClasses = asynhandler(async (req, res) => {
 const classFellows = asynhandler(async (req, res) => {
   const { classId } = req.params;
 
-  // Validate ObjectId
   if (!mongoose.Types.ObjectId.isValid(classId)) {
     throw new apiErrror(400, "Invalid Class ID");
   }
 
-  // Check class exists
   const classExists = await Class.findById(classId);
   if (!classExists) {
     throw new apiErrror(404, "Class not found");
   }
 
-  // Find the classMembers document
   const classMembersDoc = await classMember
     .findOne({ classId: new mongoose.Types.ObjectId(classId) })
     .populate("students", "userName email"); // populate the array of students
@@ -104,12 +97,11 @@ const classFellows = asynhandler(async (req, res) => {
     );
   }
 
-  // Map students array to desired output
   const result = classMembersDoc.students.map((s) => ({
     studentId: s._id,
     name: s.userName,
     email: s.email,
-    classId, // add classId here for each student
+    classId, 
   }));
 
   return res

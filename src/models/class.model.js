@@ -4,7 +4,7 @@ const classschema = new mongoose.Schema(
   {
   ClassName: {
       type: String,
-      required: true,  // konsi class ha
+      required: true,  
     },
     Subject: {
       type: String,

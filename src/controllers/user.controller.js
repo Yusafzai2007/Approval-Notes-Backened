@@ -108,14 +108,12 @@ const getstudent = asynhandler(async (req, res) => {
 });
 
 const currentuser = asynhandler(async (req, res) => {
-  // Make sure the user is attached to req (e.g., via middleware)
   const user = req.user;
 
   if (!user) {
     throw new apiErrror(400, "No user data found");
   }
 
-  // If you are using Mongoose, you should use findOne or findById
   const userdata = await signup.findOne({ _id: user._id });
 
   res.status(200).json(new apiResponse(200, "currentuser", userdata));

@@ -5,7 +5,7 @@ const classMemberSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Class",
     required: true,
-    unique: true       // 🔥 Important: 1 class = 1 record only
+    unique: true      
   },
 
   students: [

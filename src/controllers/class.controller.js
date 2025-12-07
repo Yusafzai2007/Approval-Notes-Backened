@@ -5,7 +5,6 @@ import { Class } from "../models/class.model.js";
 import mongoose from "mongoose";
 import { Notes } from "../models/notes.model.js";
 import { classMember } from "../models/classemeber.model.js";
-// Function to generate random 5-character code
 function generateClassCode() {
   return Math.random().toString(36).substring(2, 7).toUpperCase();
 }
@@ -17,7 +16,6 @@ const createclass = asynhandler(async (req, res) => {
     throw new apiErrror(400, "ClassName and Subject are required");
   }
 
-  // Auto-generate random class code
   let classCode = generateClassCode();
 
   let exists = await Class.findOne({ classCode });
@@ -51,16 +49,13 @@ const updateClass = asynhandler(async (req, res) => {
     throw new apiErrror(404, "Class not found");
   }
 
-  // Check if logged in teacher owns this class
   if (foundClass.teacher.toString() !== req.user._id.toString()) {
     throw new apiErrror(403, "You are not authorized to update this class");
   }
 
-  // Update fields if provided
   if (ClassName) foundClass.ClassName = ClassName;
   if (Subject) foundClass.Subject = Subject;
 
-  // Save updated class
   const updatedClass = await foundClass.save();
 
   res
@@ -69,7 +64,6 @@ const updateClass = asynhandler(async (req, res) => {
 });
 
 const getMyClasses = asynhandler(async (req, res) => {
-  // Find classes created by logged-in teacher
   const myClasses = await Class.find({ teacher: req.user._id });
 
   res
